@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{95c6031f-06eb-454f-912a-bb32fd556578}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\StreamBuffer.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\StreamQueue.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\struct.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\Clock.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\CrashDump.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\DBConnector.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\LockFreeQueue.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\LockFreeStack.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\Logger.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\MemoryPool.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\MMOServer.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\MMOSession.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\2018\procademy\Lib\Parser.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="MMOChatServer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MMOChatSession.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Sector.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\StreamQueue.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\Clock.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\CrashDump.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\DBConnector.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\Logger.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\MMOServer.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\MMOSession.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\Parser.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\2018\procademy\Lib\StreamBuffer.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="MMOChatServer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MMOChatSession.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
