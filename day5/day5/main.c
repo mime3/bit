@@ -234,6 +234,18 @@ void list_sort()
 	}
 }
 
+void list_all_del()
+{
+	NODE * del = head->next;
+	while (del != tail)
+	{
+		NODE * temp = del->next;
+		free(del);
+		del = temp;
+	}
+	head->next = tail;
+}
+
 struct subject
 {
 	int subname[5];
@@ -309,9 +321,18 @@ int main()
 	//Input(s);
 	//CalRanking(s);
 	//PrintList(s);
-	int data;
-	int target = 3;
+
 	list_init();
+
+
+	list_add_front(1);
+	list_add_front(2);
+	list_add_front(3);
+	list_all_del();
+	list_print();
+
+	system("pause");
+	return 0;
 
 	int add = 0;
 	while (1)
