@@ -13,8 +13,3 @@ typedef struct ROOM
 	void Init(int roomNo);
 }Room;
 
-void ROOM::Init(int roomNo)
-{
-	this->roomNo = roomNo;
-	userMap.clear();
-}

@@ -12,5 +12,5 @@ typedef struct MESSAGE
 	};
 	MESSAGE_TYPE type;		// 타입
 	__int64 sessionID;		// 세션 ID
-	StreamBuffer* data;	// 패킷 포인터
+	Packet* data;	// 패킷 포인터
 }Message;

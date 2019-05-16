@@ -1,12 +1,12 @@
 #pragma once
 #include "LanServer.h"
-#include "Player.h"
 #include "Room.h"
 #include "Message.h"
 #include <map>
 #include <unordered_map>
+#include "CommonProtocol.h"
 
-LPCWSTR LOG_FILENAME = L"Mafia";
+constexpr auto LOG_FILENAME = L"Mafia";
 
 using namespace std;
 class ChatLanServer : public LanServer
@@ -24,15 +24,16 @@ class ChatLanServer : public LanServer
 	HANDLE				_wakeUpEvent;						// 스레드를 깨울 이벤트객체
 	HANDLE				_mafiaEvent;						// 마피아 게임 진행 유도 이벤트객체
 	HANDLE				_updateThread;						// 컨텐츠 처리 스레드
+	HANDLE				_mafiaThread;
 	bool				_exitFlag;							// 종료 플래그 (미구현)
 
 	LONG _LOGIN_PLAYER = 0;									// 디버그전용
-	LONG _PACKET_TYPE_ERROR = 0;								// 디버그전용
+	LONG _PACKET_TYPE_ERROR = 0;							// 디버그전용
 	LONG _NOT_EXIST_PLAYER = 0;								// 디버그전용
 	LONG _WRONG_MOVE = 0;									// 디버그전용
-	LONG _WRONG_CHATLEN = 0;									// 디버그전용
+	LONG _WRONG_CHATLEN = 0;								// 디버그전용
 	LONG _UPDATE_TPS = 0;									// 디버그전용
-	ULONGLONG _UPDATE_TPS_TIME = GetTickCount64();									// 디버그전용
+	ULONGLONG _UPDATE_TPS_TIME = GetTickCount64();			// 디버그전용
 
 
 	/* 내부 멤버 함수 */
@@ -49,7 +50,7 @@ class ChatLanServer : public LanServer
 	bool Login(__int64 sessionID, Packet* data);			// 로그인 처리함수
 	bool RoomList(__int64 sessionID, Packet* data);
 	bool RoomCreate(__int64 sessionID, Packet* data);
-	bool RoomDestory(__int64 sessionID, Packet* data);
+	bool RoomDestory(Room * room);
 	bool RoomEnter(__int64 sessionID, Packet* data);
 	bool RoomJoin(__int64 sessionID, Packet* data);
 	bool RoomLeave(__int64 sessionID, Packet* data);
@@ -61,16 +62,16 @@ class ChatLanServer : public LanServer
 	void MakePacket_Res_Login(Packet* packet, LOGIN_CODE login, UINT accountNo);
 	void MakePacket_Res_RoomList(Packet* packet, unordered_map<int, ROOM*> * roomMap);
 	void MakePacket_Res_RoomCreate(Packet* packet, CREATE_CODE result, int roomNo, WORD roomNameLen, WCHAR * roomName);
-	void MakePacket_Res_RoomDestory(Packet* packet, UINT roomNo);
-	void MakePacket_Res_RoomEnter(Packet* packet, UINT accountNo, WCHAR * nickName);
-	void MakePacket_Res_RoomJoin(Packet* packet);
+	void MakePacket_Res_RoomDestory(Packet* packet, int roomNo);
+	void MakePacket_Res_RoomEnter(Packet* packet, ENTER_CODE code, int roomNo);
+	void MakePacket_Res_UserJoin(Packet* packet, UINT accountNo, WCHAR* nickName);
 	void MakePacket_Res_RoomLeave(Packet* packet, UINT accountNo);
 	void MakePacket_Res_Chat(Packet* packet, UINT accountNo, WCHAR* nickName, WORD chatLen, WCHAR* chat);
 	void MakePacket_Res_GameStart(Packet* packet);
 	void MakePacket_Res_GameEnd(Packet* packet, WIN win);
 	void MakePacket_Res_RoleNotify(Packet* packet);
 	void MakePacket_Res_TimeChange(Packet* packet);
-	void MakePacket_Res_VoteStart(Packet* packet);
+	void MakePacket_Res_VoteStart(Packet* packet, MafiaManager::TIME time);
 	void MakePacket_Res_Vote(Packet* packet, VOTE_CODE resultCode);
 	void MakePacket_Res_VoteEnd(Packet* packet);
 	void MakePacket_Res_Die(Packet* packet, UINT accountNo);

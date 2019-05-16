@@ -1,5 +1,30 @@
 #include "ChatLanServer.h"
-#include "CommonProtocol.h"
+
+void ChatLanServer::BroadCastAll(Packet* packet)
+{
+	auto iter = _playerMap.begin();
+	auto iterEnd = _playerMap.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		SendPacket(iter->first, packet);
+	}
+}
+
+void ChatLanServer::BroadCastRoom(Packet* packet, int roomNo, bool live)
+{
+	Room* room = _roomMap.find(roomNo)->second;
+	auto iter = room->userMap.begin();
+	auto iterEnd = room->userMap.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (live || iter->second->mafia.life == 0)
+		{
+			SendPacket(iter->second->sessionID, packet);
+		}
+	}
+}
 
 ChatLanServer::ChatLanServer()
 {
@@ -10,6 +35,7 @@ ChatLanServer::ChatLanServer()
 	li.QuadPart = 0;
 	SetWaitableTimer(_mafiaEvent, &li, 5 * 1000, NULL, NULL, FALSE);
 	_updateThread = (HANDLE)_beginthreadex(NULL, 0, UpdateThread, this, STACK_SIZE_PARAM_IS_A_RESERVATION, NULL);
+	_mafiaThread = (HANDLE)_beginthreadex(NULL, 0, MafiaThread, this, STACK_SIZE_PARAM_IS_A_RESERVATION, NULL);
 }
 
 ChatLanServer::~ChatLanServer()
@@ -45,6 +71,31 @@ void ChatLanServer::Stop()
 	}
 	CloseHandle(_wakeUpEvent);
 	CloseHandle(_updateThread);
+}
+
+void ChatLanServer::PrintInfo()
+{
+	printf_s("[CHAT SERVER]\n");
+	printf_s("----------------------------------------------------\n");
+	printf_s("Session Count = %d\n", GetClientCount());
+	printf_s("Packet Alloc Count = %d\n", StreamBuffer::_allocCount);
+
+	printf_s("MSG Alloc Count = %d\n",_memoryPoolMessage._allocCount);
+	printf_s("MSG Queue Count = %I64d\n", _messageQueue.GetUseCount());
+
+	printf_s("Player Alloc Count = %d\n", _memoryPoolPlayer._allocCount);
+	printf_s("Player MapSize = %I64d\n", _playerMap.size());
+
+	printf_s("Accept Count = %I64d\n", _acceptCount);
+	printf_s("Accept TPS = %d\n", _acceptTPS);
+	printf_s("Update TPS = %d\n", _UPDATE_TPS);
+
+	printf_s("----------------------------------------------------\n");
+
+	InterlockedAdd((LONG*)& _acceptTPS, -_acceptTPS);
+	InterlockedAdd((LONG*)& _UPDATE_TPS, -_UPDATE_TPS);
+
+
 }
 
 void ChatLanServer::OnClientJoin(INT64 ClientID, Session* session)
@@ -144,7 +195,7 @@ UINT __stdcall ChatLanServer::MafiaThread(LPVOID param)
 	while (true)
 	{
 		WaitForSingleObject(_this->_mafiaEvent, INFINITE);
-		if (_exit)
+		if (_this->_exitFlag)
 			break;
 		Message* mafiaMessage = _this->_memoryPoolMessage.Alloc();
 		mafiaMessage->type = MESSAGE::MESSAGE_TYPE::MAFIA;
@@ -211,8 +262,25 @@ void ChatLanServer::UpdateGame()
 			// 낮 -> 밤 변경시 실행코드
 			if (curTime - manager->lastChangeTime > DAYTIME_PERIOD)
 			{
+				WIN win = manager->CheckEnd();
+				if (win != NONE)
+				{
+					manager->started = false;
+
+					Packet* endGame = PacketAlloc(LanServer);
+					MakePacket_Res_GameEnd(endGame, win);
+					BroadCastRoom(endGame, iterRoom->second->roomNo);
+					PacketFree(endGame);
+					break;
+				}
 				manager->lastChangeTime = curTime;
 				manager->time = MafiaManager::TIME::NIGHTTIME;
+				manager->StartVote(MafiaManager::TIME::NIGHTTIME);
+
+				Packet* voteStart = PacketAlloc(LanServer);
+				MakePacket_Res_VoteStart(voteStart, manager->time);
+				BroadCastRoom(voteStart, iterRoom->second->roomNo, true);
+				PacketFree(voteStart);
 			}
 			// 낮 동안 실행될 코드
 			else
@@ -252,16 +320,31 @@ void ChatLanServer::UpdateGame()
 				manager->lastChangeTime = curTime;
 				manager->time = MafiaManager::TIME::DAYTIME;
 				manager->days++;
-				manager->StartVote();
+				manager->StartVote(MafiaManager::TIME::DAYTIME);
 
 				Packet* voteStart = PacketAlloc(LanServer);
-				MakePacket_Res_VoteStart(voteStart);
+				MakePacket_Res_VoteStart(voteStart, manager->time);
 				BroadCastRoom(voteStart, iterRoom->second->roomNo, true);
 				PacketFree(voteStart);
 			}
+			// 밤 동안 실행될 코드 부분
 			else
 			{
-				// 밤 동안 실행될 코드
+				// 투표 마감
+				if (curTime - manager->voteStartTime > VOTETIME_PERIOD)
+				{
+					UINT select = 0;
+					// 동률 없음
+					if (manager->EndVote(&select))
+					{
+						UINT roomNo = (manager->userMap)[select]->roomNo;
+
+						Packet* userDie = PacketAlloc(LanServer);
+						MakePacket_Res_Die(userDie, select);
+						BroadCastRoom(userDie, roomNo);
+						PacketFree(userDie);
+					}
+				}
 			}
 			break;
 		}
@@ -285,6 +368,9 @@ void ChatLanServer::PacketProc(MESSAGE* message)
 		break;
 	case en_PACKET_CS_CHAT_REQ_ROOM_ENTER:
 		RoomEnter(message->sessionID, message->data);
+		break;
+	case en_PACKET_CS_CHAT_REQ_ROOM_LEAVE:
+		RoomLeave(message->sessionID, message->data);
 		break;
 	case en_PACKET_CS_CHAT_REQ_MESSAGE:
 		Chat(message->sessionID, message->data);
@@ -392,21 +478,22 @@ bool ChatLanServer::RoomCreate(__int64 sessionID, Packet* data)
 		Room* newRoom = _memoryPoolRoom.Alloc();
 		newRoom->Init(roomNo);
 	}
-
-	delete[] roomName;
-
 	Packet* res_RoomCreate = PacketAlloc(LanServer);
 	MakePacket_Res_RoomCreate(res_RoomCreate, result, roomNo, roomNameLen, roomName);
 	BroadCastAll(res_RoomCreate);
 	PacketFree(res_RoomCreate);
-	if (result != OK)
+
+	delete[] roomName;
+	if (result != CREATE_CODE::OK)
 		return false;
 	return true;
 }
 
-bool ChatLanServer::RoomDestory(__int64 sessionID, Packet* data)
+bool ChatLanServer::RoomDestory(Room * room)
 {
 	Packet* res_RoomDestory = PacketAlloc(LanServer);
+	MakePacket_Res_RoomDestory(res_RoomDestory, room->roomNo);
+	BroadCastAll(res_RoomDestory);
 	PacketFree(res_RoomDestory);
 	return true;
 }
@@ -416,28 +503,35 @@ bool ChatLanServer::RoomEnter(__int64 sessionID, Packet* data)
 	int roomNo;
 	*data >> roomNo;
 
+	ENTER_CODE resultCode = ENTER_CODE::OK;
 	Player* player = _playerMap.find(sessionID)->second;
 	auto iterRoom = _roomMap.find(roomNo);
 	if (iterRoom == _roomMap.end())
-		return false;
+		resultCode = ENTER_CODE::ROOMNO_ERROR;
 
-	Room* room = iterRoom->second;
-	// 방에 원래 있던 유저목록 전송
 	Packet* res_RoomEnter_Room = PacketAlloc(LanServer);
-	MakePacket_Res_RoomEnter(res_RoomEnter_Room, player->accountNo, player->nickName);
+	MakePacket_Res_RoomEnter(res_RoomEnter_Room, resultCode, roomNo);
 
-	auto iterRoomUser = room->userMap.begin();
-	auto iterRoomUserEnd = room->userMap.end();
-	for (; iterRoomUser != iterRoomUserEnd; ++iterRoomUser)
+	if (resultCode == ENTER_CODE::OK)
 	{
-		Packet* res_RoomEnter = PacketAlloc(LanServer);
-		MakePacket_Res_RoomEnter(res_RoomEnter, iterRoomUser->second->accountNo, iterRoomUser->second->nickName);
-		SendPacket(sessionID, res_RoomEnter);
-		PacketFree(res_RoomEnter);
-		SendPacket(iterRoomUser->second->sessionID, res_RoomEnter_Room);
+		Room* room = iterRoom->second;
+		// 방에 원래 있던 유저목록 전송
+
+		auto iterRoomUser = room->userMap.begin();
+		auto iterRoomUserEnd = room->userMap.end();
+		for (; iterRoomUser != iterRoomUserEnd; ++iterRoomUser)
+		{
+			Packet* res_RoomEnter = PacketAlloc(LanServer);
+			MakePacket_Res_UserJoin(res_RoomEnter, iterRoomUser->second->accountNo, iterRoomUser->second->nickName);
+			SendPacket(sessionID, res_RoomEnter);
+			PacketFree(res_RoomEnter);
+			SendPacket(iterRoomUser->second->sessionID, res_RoomEnter_Room);
+		}
 	}
 	PacketFree(res_RoomEnter_Room);
 
+	if (resultCode != ENTER_CODE::OK)
+		return false;
 	return true;
 }
 
@@ -470,11 +564,7 @@ bool ChatLanServer::RoomLeave(__int64 sessionID, Packet* data)
 	// 다 나가면 방 파괴
 	if (room->userMap.size() == 0)
 	{
-		Packet* roomDestory = PacketAlloc(LanServer);
-		MakePacket_Res_RoomDestory(roomDestory, room->roomNo);
-		BroadCastAll(roomDestory);
-		PacketFree(roomDestory);
-
+		RoomDestory(room);
 		_roomMap.erase(room->roomNo);
 		_memoryPoolRoom.Free(room);
 	}
@@ -589,9 +679,9 @@ bool ChatLanServer::Vote(__int64 sessionID, Packet* data)
 		return false;
 	}
 
-	VOTE_CODE resultCode = SUCCESS;
+	VOTE_CODE resultCode = VOTE_CODE::SUCCESS;
 	if (!room->gameManager.Vote(player, candidateNo))
-		resultCode = FAILURE;
+		resultCode = VOTE_CODE::FAILURE;
 	
 	Packet* res_Vote = PacketAlloc(LanServer);
 	MakePacket_Res_Vote(res_Vote, resultCode);
@@ -603,4 +693,121 @@ bool ChatLanServer::UseAbility(__int64 sessionID, Packet* data)
 {
 	
 	return true;
+}
+
+void ChatLanServer::MakePacket_Res_Login(Packet* packet, LOGIN_CODE login, UINT accountNo)
+{
+	*packet << login << accountNo;
+}
+
+void ChatLanServer::MakePacket_Res_RoomList(Packet* packet, unordered_map<int, ROOM*>* roomMap)
+{
+	WORD roomCount = (WORD)roomMap->size();
+	*packet << en_PACKET_CS_CHAT_RES_ROOM_LIST << roomCount;
+	auto iterRoom = roomMap->begin();
+	auto iterRoomEnd = roomMap->end();
+	for (; iterRoom != iterRoomEnd; ++iterRoom)
+	{
+		Room* room = iterRoom->second;
+		WORD roomNameLen = (WORD)wcslen(room->roomName);
+		*packet << room->roomNo << roomNameLen * 2;
+		packet->In(room->roomName, roomNameLen);
+		*packet << (BYTE)room->userMap.size();
+		auto iterUser = room->userMap.begin();
+		auto iterUserEnd = room->userMap.end();
+		for (; iterUser != iterUserEnd; ++iterUser)
+		{
+			PLAYER* player = iterUser->second;
+			packet->In(player->nickName, NICKNAME_LEN);
+		}
+	}
+}
+
+void ChatLanServer::MakePacket_Res_RoomCreate(Packet* packet, CREATE_CODE result, int roomNo, WORD roomNameLen, WCHAR* roomName)
+{
+	*packet << en_PACKET_CS_CHAT_RES_ROOM_CREATE << result;
+	if (result == CREATE_CODE::OK)
+	{
+		*packet << roomNo << roomNameLen;
+		packet->In(roomName, roomNameLen);
+	}
+}
+
+void ChatLanServer::MakePacket_Res_RoomDestory(Packet* packet, int roomNo)
+{
+	*packet << en_PACKET_CS_CHAT_RES_ROOM_DESTORY << roomNo;
+}
+
+void ChatLanServer::MakePacket_Res_RoomEnter(Packet* packet, ENTER_CODE code, int roomNo)
+{
+	*packet << en_PACKET_CS_CHAT_RES_ROOM_ENTER << code;
+	if (code == ENTER_CODE::OK)
+	{
+		Room* room = _roomMap.find(roomNo)->second;
+		*packet << roomNo;
+		WORD roomNameLen = (WORD)wcslen(room->roomName);
+		*packet << roomNameLen * 2;
+		packet->In(room->roomName, roomNameLen);
+		BYTE userCount = (BYTE)room->userMap.size();
+		*packet << userCount;
+		auto iter = room->userMap.begin();
+		auto iterEnd = room->userMap.end();
+		for (; iter != iterEnd; ++iter)
+		{
+			PLAYER* player = iter->second;
+			packet->In(player->nickName, NICKNAME_LEN);
+			*packet << player->accountNo;
+		}
+	}
+}
+
+void ChatLanServer::MakePacket_Res_UserJoin(Packet* packet, UINT accountNo, WCHAR* nickName)
+{
+	*packet << en_PACKET_CS_CHAT_RES_USER_ENTER << accountNo;
+	packet->In(nickName, NICKNAME_LEN);
+}
+
+void ChatLanServer::MakePacket_Res_RoomLeave(Packet* packet, UINT accountNo)
+{
+	*packet << en_PACKET_CS_CHAT_RES_ROOM_LEAVE << accountNo;
+}
+
+void ChatLanServer::MakePacket_Res_Chat(Packet* packet, UINT accountNo, WCHAR* nickName, WORD chatLen, WCHAR* chat)
+{
+	*packet << en_PACKET_CS_CHAT_RES_MESSAGE << accountNo;
+	packet->In(nickName, NICKNAME_LEN);
+	*packet << chatLen;
+	packet->In(chat, chatLen / 2);
+}
+
+void ChatLanServer::MakePacket_Res_GameStart(Packet* packet)
+{
+}
+
+void ChatLanServer::MakePacket_Res_GameEnd(Packet* packet, WIN win)
+{
+}
+
+void ChatLanServer::MakePacket_Res_RoleNotify(Packet* packet)
+{
+}
+
+void ChatLanServer::MakePacket_Res_TimeChange(Packet* packet)
+{
+}
+
+void ChatLanServer::MakePacket_Res_VoteStart(Packet* packet, MafiaManager::TIME time)
+{
+}
+
+void ChatLanServer::MakePacket_Res_Vote(Packet* packet, VOTE_CODE resultCode)
+{
+}
+
+void ChatLanServer::MakePacket_Res_VoteEnd(Packet* packet)
+{
+}
+
+void ChatLanServer::MakePacket_Res_Die(Packet* packet, UINT accountNo)
+{
 }

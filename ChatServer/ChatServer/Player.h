@@ -17,15 +17,3 @@ typedef struct PLAYER
 	void Die();
 	void UseAbility(UINT targetID);
 }Player;
-
-void PLAYER::GameInit()
-{
-	mafia.life = 1;
-	mafia.type = NONE;
-	mafia.vote = false;
-}
-
-void PLAYER::Die()
-{
-	mafia.life = 0;
-}

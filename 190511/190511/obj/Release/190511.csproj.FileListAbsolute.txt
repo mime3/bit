@@ -1,0 +1,6 @@
+C:\Users\bit\Desktop\vs\190511\190511\bin\Release\190511.exe.config
+C:\Users\bit\Desktop\vs\190511\190511\bin\Release\190511.exe
+C:\Users\bit\Desktop\vs\190511\190511\bin\Release\190511.pdb
+C:\Users\bit\Desktop\vs\190511\190511\obj\Release\190511.csproj.CoreCompileInputs.cache
+C:\Users\bit\Desktop\vs\190511\190511\obj\Release\190511.exe
+C:\Users\bit\Desktop\vs\190511\190511\obj\Release\190511.pdb

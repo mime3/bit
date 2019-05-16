@@ -1,5 +1,7 @@
 #pragma once
-enum en_PACKET_TYPE
+#include <Windows.h>
+
+enum en_PACKET_TYPE : WORD
 {
 	en_PACKET_CS_CHAT_SERVER = 0,
 
@@ -20,6 +22,7 @@ enum en_PACKET_TYPE
 	//		WORD	Type
 	//
 	//		BYTE	Result				(1:OK / 2:중복닉네임 / 3:사용자초과 / 4:기타오류)
+	//		OK시에만 아래 정보 포함
 	//		UINT	AccountNo
 	//	}
 	//
@@ -60,9 +63,9 @@ enum en_PACKET_TYPE
 	//	
 	//	{
 	// 		WORD	Type
-	//
-	//		WORD	RoomName Size
-	//		Size	RoomName	
+	//		
+	//		WORD	RoomNameLen
+	//		WCHAR	RoomName[RoomNameLen / 2]
 	//	}
 	//------------------------------------------------------------
 	en_PACKET_CS_CHAT_REQ_ROOM_CREATE,
@@ -74,7 +77,7 @@ enum en_PACKET_TYPE
 	//		WORD	Type
 	//
 	//		BYTE	ResultCode		(1:OK / 2:방이름 중복 / 3:개수초과 / 4:기타오류)
-	//		
+	//		OK시에만 아래 정보 포함
 	//		INT		RoomNo
 	//		WORD	RoomNameLen
 	//		WCHAR	RoomName[RoomNameLen / 2]
@@ -95,20 +98,67 @@ enum en_PACKET_TYPE
 	en_PACKET_CS_CHAT_REQ_ROOM_ENTER,
 	
 	//------------------------------------------------------------
-	// 타 사용자 입장 (수시) 
+	// 방 입장 요청 응답
 	//
 	//	{
-	//		WORD		Type
+	//		WORD	Type
 	//
-	//		UINT		AccountNo
-	//		WCHAR[20]	NickName
+	//		BTYE	ResultCode	결과(1:OK / 2 : 방No 오류 / 3 : 인원초과 / 4 : 기타오류)
+	//		OK시에만 아래 정보 포함
+	//		INT		RoomNo
+	//		WORD	RoomNameLen
+	//		WCHAR	RoomName[RoomNameLen / 2]
+	//
+	//		BYTE	UserCount
+	//		{
+	//			WCHAR	NickName[20]
+	//			UINT	accountNo
+	//		}
 	//	}
 	//
 	//------------------------------------------------------------
-	en_PACKET_CS_CHAT_RES_USER_ENTER,
+	en_PACKET_CS_CHAT_RES_ROOM_ENTER,
 
 	//------------------------------------------------------------
-	// 방 나가기 (수시)
+	// 채팅보내기 요청
+	//
+	//	{
+	//		WORD	Type
+	//
+	//		WORD	MessageLen
+	//		WCHAR	Message[MessageLen / 2]		// null 미포함
+	//	}
+	//
+	//------------------------------------------------------------
+	en_PACKET_CS_CHAT_REQ_MESSAGE,
+
+	//------------------------------------------------------------
+	// 채팅보내기 응답  (다른 클라가 보낸 채팅도 이걸로 받음)
+	//
+	//	{
+	//		WORD	Type
+	//
+	//		UINT	AccountNo
+	//		
+	//		WORD	MessageLen
+	//		WCHAR	Message[MessageLen / 2]		// null 미포함
+	//	}
+	//
+	//------------------------------------------------------------
+	en_PACKET_CS_CHAT_RES_MESSAGE,
+			   
+	//------------------------------------------------------------
+	// 방 나가기 요청
+	//
+	//	{
+	//		WORD	Type
+	//	}
+	//
+	//------------------------------------------------------------
+	en_PACKET_CS_CHAT_REQ_ROOM_LEAVE,
+
+	//------------------------------------------------------------
+	// 방 나가기 응답(수시)
 	//
 	//	{
 	//		WORD	Type
@@ -125,41 +175,24 @@ enum en_PACKET_TYPE
 	//	{
 	//		WORD	Type
 	//
-	//		UINT	AccountNo
+	//		INT		RoomNo
 	//	}
 	//------------------------------------------------------------
 	en_PACKET_CS_CHAT_RES_ROOM_DESTORY,
 
 	//------------------------------------------------------------
-	// 채팅보내기 요청
+	// 타 사용자 입장 (수시) 
 	//
 	//	{
-	//		WORD	Type
+	//		WORD		Type
 	//
-	//		UINT	AccountNo
-	//		WORD	MessageLen
-	//		WCHAR	Message[MessageLen / 2]		// null 미포함
+	//		WCHAR[20]	NickName
+	//		UINT		AccountNo
 	//	}
 	//
 	//------------------------------------------------------------
-	en_PACKET_CS_CHAT_REQ_MESSAGE,
-	
-	//------------------------------------------------------------
-	// 채팅보내기 응답  (다른 클라가 보낸 채팅도 이걸로 받음)
-	//
-	//	{
-	//		WORD	Type
-	//
-	//		UINT	AccountNo
-	//		WCHAR	Nickname[20]				// null 포함
-	//		
-	//		WORD	MessageLen
-	//		WCHAR	Message[MessageLen / 2]		// null 미포함
-	//	}
-	//
-	//------------------------------------------------------------
-	en_PACKET_CS_CHAT_RES_MESSAGE,
-	
+	en_PACKET_CS_CHAT_RES_USER_ENTER,
+
 	//------------------------------------------------------------
 	//	게임 시작 요청
 	//
@@ -294,21 +327,21 @@ enum en_PACKET_TYPE
 	//	}
 	//
 	//------------------------------------------------------------
-	en_PACKET_CS_CHAT_RES_BROADCAST,
+	en_PACKET_CS_CHAT_RES_BROADCAST
 	
 	//------------------------------------------------------------
 	
 	//------------------------------------------------------------
 
 };
-enum RES_LOGIN_RESULT_CODE : BYTE
+enum class RES_LOGIN_RESULT_CODE : BYTE
 {
 	OK				= 1,
 	ALREADY_NAME	= 2,
 	FULL			= 3,
 	ETC				= 4
 };
-enum ROOM_CREATE_RESULT_CODE : BYTE
+enum class ROOM_CREATE_RESULT_CODE : BYTE
 {
 	//(1:OK / 2 : 방이름 중복 / 3 : 개수초과 / 4 : 기타오류)
 	OK				= 1,
@@ -317,11 +350,21 @@ enum ROOM_CREATE_RESULT_CODE : BYTE
 	ETC				= 4
 };
 
-enum VOTE_RESULT_CODE : BYTE
+enum class ROOM_ENTER_RESULT_CODE : BYTE
+{
+	//(1:OK / 2 : 방이름 중복 / 3 : 개수초과 / 4 : 기타오류)
+	OK = 1,
+	ROOMNO_ERROR = 2,
+	ROOM_FULL = 3,
+	ETC = 4
+};
+
+enum class VOTE_RESULT_CODE : BYTE
 {
 	SUCCESS = 1,
 	FAILURE = 2
 };
 typedef RES_LOGIN_RESULT_CODE LOGIN_CODE;
 typedef ROOM_CREATE_RESULT_CODE CREATE_CODE;
+typedef ROOM_ENTER_RESULT_CODE ENTER_CODE;
 typedef VOTE_RESULT_CODE VOTE_CODE;
