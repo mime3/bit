@@ -19,7 +19,7 @@ namespace _190513
             color = "흰색";
         }
 
-        public Car(string m, string c, string powerTrain)
+        public Car(string m, string c, string powerTrain = "전기")
         {
             model = m;
             color = c;
@@ -412,158 +412,176 @@ namespace _190513
 
         static void Main(string[] args)
         {
-            //int sum = Sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            //WriteLine($"Sum: {sum}");
+			int sum = Sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+			WriteLine($"Sum: {sum}");
 
-            //PrintProfile("홍길동");
-            //PrintProfile("홍길동", "010-1111-2222");
-            //PrintProfile(name: "김유신");
-            //PrintProfile(name: "이순신", phone: "010-5555-6666");
+			WriteLine();
+			WriteLine();
 
-            //WriteLine(ToLowerString("Hello"));
-            //WriteLine(ToLowerString("World"));
-            //WriteLine(ToLowerString("C# Programming"));
+			PrintProfile("홍길동");
+			PrintProfile("홍길동", "010-1111-2222");
+			PrintProfile(name: "김유신");
+			PrintProfile(phone: "010-5555-6666", name: "이순신");
 
-            //Car myCar = new Car();
-            //Car yourCar = new Car("SUV", "블랙");
-            //myCar.ShowStatus();
-            //yourCar.ShowStatus();
+			WriteLine();
+			WriteLine();
 
-            //ClassA a = new ClassA();
-            //ClassB b = new ClassB();
-            //StaticField.ShowCount();
+			WriteLine(ToLowerString("Hello"));
+			WriteLine(ToLowerString("World"));
+			WriteLine(ToLowerString("C# Programming"));
 
-            //WriteLine("shallow Copy");
-            //ShallowDeepCopy source = new ShallowDeepCopy();
-            //source.field1 = 10;
-            //source.field2 = 20;
+			WriteLine();
+			WriteLine();
 
-            //ShallowDeepCopy target = source;
-            //target.field2 = 30;
-            //WriteLine($"{source.field1} {source.field2}");
-            //WriteLine($"{target.field1} {target.field2}");
+			Car myCar = new Car();
+			Car yourCar = new Car("SUV", "블랙");
+			myCar.ShowStatus();
+			yourCar.ShowStatus();
 
-            //WriteLine("deep Copy");
-            //ShallowDeepCopy deepSource = new ShallowDeepCopy();
-            //deepSource.field1 = 10;
-            //deepSource.field2 = 20;
+			ClassA a = new ClassA();
+			ClassB b = new ClassB();
+			StaticField.ShowCount();
+			WriteLine(StaticField.count);
 
-            //ShallowDeepCopy deepTarget = deepSource.DeepCopy();
-            //deepTarget.field2 = 30;
-            //WriteLine($"{deepSource.field1} {deepSource.field2}");
-            //WriteLine($"{deepTarget.field1} {deepTarget.field2}");
+			WriteLine();
+			WriteLine();
 
-            //Employee worker = new Employee();
-            //worker.SetName("홍길동");
-            //worker.SetPosition("Guard");
-            //WriteLine($"{worker.GetName()} {worker.GetPosition()}");
+			WriteLine("shallow Copy");
+			ShallowDeepCopy source = new ShallowDeepCopy();
+			source.field1 = 10;
+			source.field2 = 20;
 
-            //ThisConstructor thisConstructor = new ThisConstructor();
-            //thisConstructor.PrintField();
-            //ThisConstructor thisConstructor2 = new ThisConstructor(2222);
-            //thisConstructor2.PrintField();
-            //ThisConstructor thisConstructor3 = new ThisConstructor(2222, 3333);
-            //thisConstructor3.PrintField();
+			ShallowDeepCopy target = source;
+			target.field2 = 30;
+			WriteLine($"{source.field1} {source.field2}");
+			WriteLine($"{target.field1} {target.field2}");
 
-            //Parent parent = new Parent("홍길동아버지");
-            //parent.ParentMethod();
-            //WriteLine();
+			WriteLine("deep Copy");
+			ShallowDeepCopy deepSource = new ShallowDeepCopy();
+			deepSource.field1 = 10;
+			deepSource.field2 = 20;
 
-            //Child child = new Child("홍길동");
-            //child.ParentMethod();
-            //child.ChildMethod();
-            //WriteLine();
+			ShallowDeepCopy deepTarget = deepSource.DeepCopy();
+			deepTarget.field2 = 30;
+			WriteLine($"{deepSource.field1} {deepSource.field2}");
+			WriteLine($"{deepTarget.field1} {deepTarget.field2}");
 
-            //Child child2 = new Child();
-            //child2.ParentMethod();
-            //child2.ChildMethod();
-            //WriteLine();
+			WriteLine();
+			WriteLine();
 
-            //Mammal mammal = new Mammal();
-            //mammal.Nurse();
-            //WriteLine();
+			Employee worker = new Employee();
+			worker.SetName("홍길동");
+			worker.SetPosition("Guard");
+			WriteLine($"{worker.GetName()} {worker.GetPosition()}");
 
-            //mammal = new Dog();
-            //mammal.Nurse();
-            //WriteLine();
-            //if (mammal is Dog)
-            //{
-            //    Dog dog = (Dog)mammal;
-            //    dog.Nurse();
-            //    dog.Bark();
-            //    WriteLine();
-            //}
-            //mammal = new Human();
-            //mammal.Nurse();
-            //WriteLine();
+			ThisConstructor thisConstructor = new ThisConstructor();
+			thisConstructor.PrintField();
+			ThisConstructor thisConstructor2 = new ThisConstructor(2222);
+			thisConstructor2.PrintField();
+			ThisConstructor thisConstructor3 = new ThisConstructor(2222, 3333);
+			thisConstructor3.PrintField();
 
-            ////Human human = (Human)mammal;
-            //Human human = mammal as Human;
-            //if (human != null)
-            //{
-            //    human.Nurse();
-            //    human.Speak();
-            //}
-            //else
-            //    WriteLine("human is not Human");
+			Parent parent = new Parent("홍길동아버지");
+			parent.ParentMethod();
+			WriteLine();
 
-            //GasolineCar gasolineCar = new GasolineCar("소나타", "가솔린엔진");
-            //gasolineCar.Drive();
+			Child child = new Child("홍길동");
+			child.ParentMethod();
+			child.ChildMethod();
+			WriteLine();
 
-            //HybridCar hybridCar = new HybridCar("프리우스", "가솔린엔진, 전기모터");
-            //hybridCar.Drive();
+			Child child2 = new Child();
+			child2.ParentMethod();
+			child2.ChildMethod();
+			WriteLine();
 
-            //Configuration config = new Configuration();
-            //config.SetConfig("Version", "V5.0");
-            //config.SetConfig("Size", "655,324 KB");
+			//Mammal mammal = new Mammal();
+			//mammal.Nurse();
+			//WriteLine();
 
-            //WriteLine(config.GetConfig("Version"));
-            //WriteLine(config.GetConfig("Size"));
+			//mammal = new Dog();
+			//mammal.Nurse();
+			//WriteLine();
+			//if (mammal is Dog)
+			//{
+			//    Dog dog = (Dog)mammal;
+			//    dog.Nurse();
+			//    dog.Bark();
+			//    WriteLine();
+			//}
+			//mammal = new Human();
+			//mammal.Nurse();
+			//WriteLine();
 
-            //config.SetConfig("Version", "V5.1");
-            //WriteLine(config.GetConfig("Version"));
+			////Human human = (Human)mammal;
+			//Human human = mammal as Human;
+			//if (human != null)
+			//{
+			//    human.Nurse();
+			//    human.Speak();
+			//}
+			//else
+			//    WriteLine("human is not Human");
 
-            //AAA obj = new AAA();
-            //obj.Method1();
-            //obj.Method2();
-            //obj.Method3();
-            //obj.Method4();
+			//GasolineCar gasolineCar = new GasolineCar("소나타", "가솔린엔진");
+			//gasolineCar.Drive();
 
-            //WriteLine($"3^2 : {3.Square()}");
-            //WriteLine($"3^4 : {3.Power(4)}");
-            //WriteLine($"2^10 : {2.Power(10)}");
+			//HybridCar hybridCar = new HybridCar("프리우스", "가솔린엔진, 전기모터");
+			//hybridCar.Drive();
 
-            //Point3D point1;
-            //point1.x = 10;
-            //point1.y = 20;
-            //point1.z = 30;
+			//Configuration config = new Configuration();
+			//config.SetConfig("Version", "V5.0");
+			//config.SetConfig("Size", "655,324 KB");
 
-            //WriteLine(point1.ToString());
+			//WriteLine(config.GetConfig("Version"));
+			//WriteLine(config.GetConfig("Size"));
 
-            //Point3D point2 = new Point3D(100, 200, 300);
-            //Point3D point3 = point2;
+			//config.SetConfig("Version", "V5.1");
+			//WriteLine(config.GetConfig("Version"));
 
-            //point3.z = 400;
+			//AAA obj = new AAA();
+			//obj.Method1();
+			//obj.Method2();
+			//obj.Method3();
+			//obj.Method4();
 
-            //WriteLine(point2.ToString());
-            //WriteLine(point3.ToString());
+			//WriteLine($"3^2 : {3.Square()}");
+			//WriteLine($"3^4 : {3.Power(4)}");
+			//WriteLine($"2^10 : {2.Power(10)}");
+
+			//Point3D point1;
+			//point1.x = 10;
+			//point1.y = 20;
+			//point1.z = 30;
+
+			//WriteLine(point1.ToString());
+
+			//Point3D point2 = new Point3D(100, 200, 300);
+			//Point3D point3 = point2;
+
+			//point3.z = 400;
+
+			//WriteLine(point2.ToString());
+			//WriteLine(point3.ToString());
 
 
-            //var a = ("홍길동", 20);
-            //WriteLine($"{a.Item1}, {a.Item2}");
+			//var a = ("홍길동", 20);
+			//WriteLine($"{a.Item1}, {a.Item2}");
 
-            //var b = (Name: "이순신",Age: 40);
-            //WriteLine($"{b.Item1}, {b.Item2}");
+			//var b = (Name: "이순신",Age: 40);
+			//WriteLine($"{b.Item1}, {b.Item2}");
 
-            //var (name, age) = b;
-            //WriteLine($"{name}, {age}");
+			//var (name, age) = b;
+			//WriteLine($"{name}, {age}");
 
-            //b = a;
-            //WriteLine($"{b.Name}, {b.Age}");
+			//b = a;
+			//WriteLine($"{b.Name}, {b.Age}");
 
-            AbstractBase obj = new Derived();
+			AbstractBase obj = new Derived();
             obj.AbstractMethodA();
             obj.PublicMethodA();
+
+			ReadKey();
         }
     }
 }

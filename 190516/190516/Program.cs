@@ -184,18 +184,18 @@ namespace _190516
 			//WriteLine("end");
 
 
-			//Counter counter = new Counter();
+			Counter counter = new Counter();
 
-			//Thread incThread = new Thread(new ThreadStart(counter.Increase));
-			//Thread decThread = new Thread(new ThreadStart(counter.Decrease));
+			Thread incThread = new Thread(new ThreadStart(counter.Increase));
+			Thread decThread = new Thread(new ThreadStart(counter.Decrease));
 
-			//incThread.Start();
-			//decThread.Start();
+			incThread.Start();
+			decThread.Start();
 
-			//incThread.Join();
-			//decThread.Join();
+			incThread.Join();
+			decThread.Join();
 
-			//WriteLine(counter.Count);
+			WriteLine(counter.Count);
 
 			//string srcFile = args[0];
 
@@ -221,40 +221,40 @@ namespace _190516
 			//t2.Wait();
 
 
-			//long from = Convert.ToInt64(args[0]);
-			//long to = Convert.ToInt64(args[1]);
-			//int taskCount = Convert.ToInt32(args[2]);
+			long from = Convert.ToInt64(args[0]);
+			long to = Convert.ToInt64(args[1]);
+			int taskCount = Convert.ToInt32(args[2]);
 
-			//Func<object, List<long>> FindPrimeFunc = (objRange) =>
-			//{
-			//	long[] range = (long[])objRange;
-			//	List<long> found = new List<long>();
+			Func<object, List<long>> FindPrimeFunc = (objRange) =>
+			{
+				long[] range = (long[])objRange;
+				List<long> found = new List<long>();
 
-			//	for (long i = range[0]; i <= range[1]; i++)
-			//	{
-			//		if (IsPrime(i))
-			//			found.Add(i);
-			//	}
-			//	return found;
-			//};
+				for (long i = range[0]; i <= range[1]; i++)
+				{
+					if (IsPrime(i))
+						found.Add(i);
+				}
+				return found;
+			};
 
-			//Task<List<long>>[] tasks = new Task<List<long>>[taskCount];
-			//long currentFrom = from;
-			//long currentTo = from + (to - from) / tasks.Length;
+			Task<List<long>>[] tasks = new Task<List<long>>[taskCount];
+			long currentFrom = from;
+			long currentTo = from + (to - from) / tasks.Length;
 
-			//for(int i = 0; i < tasks.Length; i++)
-			//{
-			//	WriteLine("Task[{0}] :: {1} ~ {2}", i, currentFrom, currentTo);
+			for (int i = 0; i < tasks.Length; i++)
+			{
+				WriteLine("Task[{0}] :: {1} ~ {2}", i, currentFrom, currentTo);
 
-			//	tasks[i] = new Task<List<long>>(FindPrimeFunc, new long[] { currentFrom, currentTo });
+				tasks[i] = new Task<List<long>>(FindPrimeFunc, new long[] { currentFrom, currentTo });
 
-			//	currentFrom = currentTo + 1;
+				currentFrom = currentTo + 1;
 
-			//	if (i == tasks.Length - 2)
-			//		currentTo = to;
-			//	else
-			//		currentTo += ((to - from) / tasks.Length);
-			//}
+				if (i == tasks.Length - 2)
+					currentTo = to;
+				else
+					currentTo += ((to - from) / tasks.Length);
+			}
 
 			//WriteLine("enter to start");
 			//ReadLine();
@@ -278,27 +278,27 @@ namespace _190516
 
 
 
-			//long from = Convert.ToInt64(args[0]);
-			//long to = Convert.ToInt64(args[1]);
+			long from = Convert.ToInt64(args[0]);
+			long to = Convert.ToInt64(args[1]);
 
-			//WriteLine("enter to start");
-			//ReadLine();
-			//WriteLine("start");
+			WriteLine("enter to start");
+			ReadLine();
+			WriteLine("start");
 
-			//DateTime startTime = DateTime.Now;
-			//List<long> total = new List<long>();
+			DateTime startTime = DateTime.Now;
+			List<long> total = new List<long>();
 
-			//Parallel.For(from ,to + 1, (long i) => 
-			//{
-			//if (IsPrime(i))
-			//	total.Add(i);
-			//});
+			Parallel.For(from, to + 1, (long i) =>
+			{
+				if (IsPrime(i))
+					total.Add(i);
+			});
 
-			//DateTime endTime = DateTime.Now;
-			//TimeSpan esllapsed = endTime - startTime;
+			DateTime endTime = DateTime.Now;
+			TimeSpan esllapsed = endTime - startTime;
 
-			//WriteLine("prime number count between {0} abd {1}", from, to, total.Count);
-			//WriteLine("ellapsed time : {0}", esllapsed);
+			WriteLine("prime number count between {0} abd {1}", from, to, total.Count);
+			WriteLine("ellapsed time : {0}", esllapsed);
 
 
 			Caller();

@@ -136,16 +136,14 @@ namespace _190515
 				yield return array[i];
 		}
 	}
-	class MyEnumerator
+	class MyEnumerator : IEnumerable
 	{
 		private int[] numbers = { 1, 2, 3, 4 };
 
 		public IEnumerator GetEnumerator()
 		{
-			yield return numbers[0];
-			yield return numbers[1];
-			yield return numbers[2];
-			yield return numbers[3];
+			for (int i = 0; i < numbers.Length; i++)
+				yield return numbers[i];
 		}
 	}
 
@@ -540,8 +538,6 @@ namespace _190515
 			var obj = new MyEnumerator();
 			foreach (int i in obj)
 				WriteLine(i);
-
-
 
 			MyList list = new MyList();
 			for(int i = 0; i< 5;i++)

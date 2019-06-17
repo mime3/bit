@@ -32,247 +32,260 @@ namespace _190511
         }
         static void Main(string[] args)
         {
-            //Console.WriteLine("Hello World!");
-            //WriteLine("Hello World!");
-            //int e = -10_000_000;
-            //uint f = 300_000_000;
-            //WriteLine($"e={e}, f={f}");
-            //WriteLine("e={0}, f={1}", e, f);
+			Console.WriteLine("Hello World!");
+			WriteLine("Hello World!");
+
+			// 숫자에서 _는 무시된다
+			int e = -10_000_000;		
+			uint f = 300_000_000;
+			// Format에서 $는 {}를 변수로 받게 해준다
+			WriteLine($"e={e}, f={f}");
+			// 없으면 인자 순서번호로 사용
+			WriteLine("e={0}, f={1}", e, f);
 
 
-            //float a = 3.1415_9265_7932_3846_2643_3832_79f;
-            //double b = 3.1415_9265_7932_3846_2643_3832_79;
-            //decimal c = 3.1415_9265_7932_3846_2643_3832_79m;
-            //WriteLine(a);
-            //WriteLine(b);
-            //WriteLine(c);
+			float a = 3.1415_9265_7932_3846_2643_3832_79f;	// 6자리
+			double b = 3.1415_9265_7932_3846_2643_3832_79;	// 14자리
+			decimal c = 3.1415_9265_7932_3846_2643_3832_79m;// 끝까지
+			WriteLine(a);
+			WriteLine(b);
+			WriteLine(c);
 
-            //string a1 = "독도는 우리땅";
-            //string b1 = "대마도도 우리땅";
-            //WriteLine(a1);
-            //WriteLine(b1);
+			WriteLine();
+			WriteLine();
 
-            //object a2 = 123;
-            //object b2 = 3.14159m;
-            //object c2 = true;
-            //object d2 = "문자열";
-            //WriteLine(a2);
-            //WriteLine(b2);
-            //WriteLine(c2);
-            //WriteLine(d2);
+			string a1 = "독도는 우리땅";
+			string b1 = "대마도도 우리땅";
+			WriteLine(a1);
+			WriteLine(b1);
 
-            //int a3 = 123;
-            //string b3 = a3.ToString();
-            //WriteLine(b3);
-            //float c3 = 3.14f;
-            //string d3 = c3.ToString();
-            //WriteLine(d3);
-            //string e3 = "123456";
-            //int f3 = int.Parse(e3);
-            //WriteLine(f3);
-            //string g3 = "1.2345";
-            //float h3 = float.Parse(g3);
-            //WriteLine(h3);
+			object a2 = 123;
+			object b2 = 3.14159m;
+			object c2 = true;
+			object d2 = "문자열";
+			WriteLine(a2);
+			WriteLine(b2);
+			WriteLine(c2);
+			WriteLine(d2);
 
-            //const int MAX_INT = 2147483647;
-            //const int MIN_INT = -2147483648;
+			int a3 = 123;
+			string b3 = a3.ToString();
+			WriteLine(b3);
+			float c3 = 3.14f;
+			string d3 = c3.ToString();
+			WriteLine(d3);
+			string e3 = "123456";
+			int f3 = int.Parse(e3);
+			WriteLine(f3);
+			string g3 = "1.2345";
+			float h3 = float.Parse(g3);
+			WriteLine(h3);
 
-            //WriteLine((int)COLOR_CODE.RED);
-            //WriteLine((int)COLOR_CODE.BLUE);
-            //WriteLine(COLOR_CODE.GREEN);
-            //WriteLine(COLOR_CODE.ORANGE);
-            //COLOR_CODE code = COLOR_CODE.RED;
-            //WriteLine(code == COLOR_CODE.BLUE);
-            //WriteLine(code == COLOR_CODE.RED);
-            //WriteLine((int)COLOR_CODE.GREEN);
-            //WriteLine(value: (int)COLOR_CODE.ORANGE);
+			WriteLine();
+			WriteLine();
 
-            //int? a4 = null;
-            //WriteLine(a4.HasValue);
-            //WriteLine(a4 != null);
-            //a4 = 3;
-            //WriteLine(a4.HasValue);
-            //WriteLine(a4 != null);
-            //WriteLine(a4.Value);
-            //WriteLine(a4);
+			const int MAX_INT = 2147483647;
+			const int MIN_INT = -2147483648;
 
-            //var a5 = 20;
-            //WriteLine("Typr: {0}, Value: {1}", a5.GetType(), a5);
+			WriteLine((int)COLOR_CODE.RED);
+			WriteLine((int)COLOR_CODE.BLUE);
+			WriteLine(COLOR_CODE.GREEN);
+			WriteLine(COLOR_CODE.ORANGE);
+			COLOR_CODE code = COLOR_CODE.RED;
+			WriteLine(code == COLOR_CODE.BLUE);
+			WriteLine(code == COLOR_CODE.RED);
+			WriteLine((int)COLOR_CODE.GREEN);
+			WriteLine(value: (int)COLOR_CODE.ORANGE);
 
-            //var b5 = 3.141592;
-            //WriteLine("Typr: {0}, Value: {1}", b5.GetType(), b5);
+			WriteLine();
+			WriteLine();
 
-            //var c5 = "Hello World";
-            //WriteLine("Typr: {0}, Value: {1}", c5.GetType(), c5);
+			int? a4 = null;
+			WriteLine(a4.HasValue);
+			WriteLine(a4 != null);
+			a4 = 3;
+			WriteLine(a4.HasValue);
+			WriteLine(a4 != null);
+			WriteLine(a4.Value);
+			WriteLine(a4);
 
-            //var d5 = new int[] { 10, 20, 30 };
-            //Write("Typr: {0}, Value: ", d5.GetType());
+			var a5 = 20;
+			WriteLine("Typr: {0}, Value: {1}", a5.GetType(), a5);
 
-            //foreach (var e5 in d5)
-            //{
-            //    Write("{0} ", e5);
-            //}
-            //WriteLine();
+			var b5 = 3.141592;
+			WriteLine("Typr: {0}, Value: {1}", b5.GetType(), b5);
 
-            //string str = "This is string sample";
-            //WriteLine();
-            //WriteLine(str);
-            //WriteLine();
+			var c5 = "Hello World";
+			WriteLine("Typr: {0}, Value: {1}", c5.GetType(), c5);
 
-            //WriteLine("Index of 'search' : {0}", str.IndexOf("search"));
-            //WriteLine("Index of 'h' : {0}", str.IndexOf('h'));
-            //WriteLine("StartWith 'This' : {0}", str.StartsWith("This"));
-            //WriteLine("StartWith 'string' : {0}", str.StartsWith("string"));
-            //WriteLine("EndWith 'This' : {0}", str.EndsWith("This"));
-            //WriteLine("EndWith 'sample' : {0}", str.EndsWith("sample"));
-            //WriteLine("Contains 'search' : {0}", str.EndsWith("search"));
-            //WriteLine("Contains 'school' : {0}", str.EndsWith("school"));
-            //WriteLine("Replace 'sample' with 'example' : {0}", str.Replace("sample", "example"));
+			var d5 = new int[] { 10, 20, 30 };
+			Write("Typr: {0}, Value: ", d5.GetType());
 
-            //WriteLine("ToLower() : {0}", "Hello World".ToLower());
-            //WriteLine("ToUpper() : {0}", "Hello World".ToUpper());
-            //WriteLine("Insert() : {0}", "Hello World".Insert(6, "Wonderful "));
-            //WriteLine("Remove() : {0}", "Hello Wonderful World".Remove(6, 10));
-            //WriteLine("Trim() : {0}", " I am Tom ".Trim());
-            //WriteLine("TrimStart() : {0}", " I am Tom ".TrimStart());
-            //WriteLine("TrimEnd() : {0}", " I am Tom ".TrimEnd());
+			foreach (var e5 in d5)
+			{
+				Write("{0} ", e5);
+			}
+			WriteLine();
 
-            //string str2 = "Welcome to the C# world";
-            //WriteLine(str2.Substring(15, 2));
-            //WriteLine(str2.Substring(8));
-            //WriteLine();
+			string str = "This is string sample";
+			WriteLine();
+			WriteLine(str);
+			WriteLine();
 
-            //string[] arr = str2.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            //WriteLine("Word Count : {0}", arr.Length);
+			WriteLine("Index of 'search' : {0}", str.IndexOf("search"));
+			WriteLine("Index of 'h' : {0}", str.IndexOf('h'));
+			WriteLine("StartWith 'This' : {0}", str.StartsWith("This"));
+			WriteLine("StartWith 'string' : {0}", str.StartsWith("string"));
+			WriteLine("EndWith 'This' : {0}", str.EndsWith("This"));
+			WriteLine("EndWith 'sample' : {0}", str.EndsWith("sample"));
+			WriteLine("Contains 'search' : {0}", str.EndsWith("search"));
+			WriteLine("Contains 'school' : {0}", str.EndsWith("school"));
+			WriteLine("Replace 'sample' with 'example' : {0}", str.Replace("sample", "example"));
 
-            //foreach (string element in arr)
-            //    WriteLine("{0}", element);
+			WriteLine("ToLower() : {0}", "Hello World".ToLower());
+			WriteLine("ToUpper() : {0}", "Hello World".ToUpper());
+			WriteLine("Insert() : {0}", "Hello World".Insert(6, "Wonderful "));
+			WriteLine("Remove() : {0}", "Hello Wonderful World".Remove(6, 10));
+			WriteLine("Trim() : {0}", " I am Tom ".Trim());
+			WriteLine("TrimStart() : {0}", " I am Tom ".TrimStart());
+			WriteLine("TrimEnd() : {0}", " I am Tom ".TrimEnd());
 
-            //string fmt = "{0,-10}{1,-5}{2,10}";
+			string str2 = "Welcome to the C# world";
+			WriteLine(str2.Substring(15, 2));
+			WriteLine(str2.Substring(8));
+			WriteLine();
 
-            //WriteLine(fmt, "Type", "Size", "Explain");
-            //WriteLine(fmt, "byte", "1", "byte타입");
-            //WriteLine(fmt, "short", "2", "short타입");
-            //WriteLine(fmt, "int", "4", "int타입");
-            //WriteLine(fmt, "long", "8", "long타입");
+			string[] arr = str2.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+			WriteLine("Word Count : {0}", arr.Length);
 
-            //WriteLine("10진수: {0:D}", 123);
-            //WriteLine("10진수: {0:D5}", 123);
-            //WriteLine("16진수: {0:X}", 0xFF1234);
-            //WriteLine("16진수: {0:X8}", 0xFF1234);
-            //WriteLine("숫자: {0:N}", 123456);
-            //WriteLine("숫자: {0:N0}", 123456);
-            //WriteLine("고정소수점: {0:F}", 123.456);
-            //WriteLine("고정소수점: {0:F5}", 123.456);
-            //WriteLine("공학: {0:E}", 123.456789);
+			foreach (string element in arr)
+				WriteLine("{0}", element);
 
-            //DateTime dt = DateTime.Now;
+			string fmt = "{0,-10}{1,-5}{2,10}";
 
-            //WriteLine("12시간 형식: {0:yyyy-MM-dd tt hh:mm:ss (ddd)}", dt);
-            //WriteLine("24시간 형식: {0:yyyy-MM-dd HH:mm:ss (dddd)}", dt);
+			WriteLine(fmt, "Type", "Size", "Explain");
+			WriteLine(fmt, "byte", "1", "byte타입");
+			WriteLine(fmt, "short", "2", "short타입");
+			WriteLine(fmt, "int", "4", "int타입");
+			WriteLine(fmt, "long", "8", "long타입");
 
-            //CultureInfo ciKR = new CultureInfo("ko-KR");
-            //WriteLine();
-            //WriteLine(dt.ToString("yyyy-MM-dd tt hh:mm:ss (ddd)", ciKR));
-            //WriteLine(dt.ToString("yyyy-MM-dd HH:mm:ss (dddd)", ciKR));
-            //WriteLine(dt.ToString(ciKR));
-            //CultureInfo ciUS = new CultureInfo("en-US");
-            //WriteLine();
-            //WriteLine(dt.ToString("yyyy-MM-dd tt hh:mm:ss (ddd)", ciUS));
-            //WriteLine(dt.ToString("yyyy-MM-dd HH:mm:ss (dddd)", ciUS));
-            //WriteLine(dt.ToString(ciUS));
+			WriteLine("10진수: {0:D}", 123);
+			WriteLine("10진수: {0:D5}", 123);
+			WriteLine("16진수: {0:X}", 0xFF1234);
+			WriteLine("16진수: {0:X8}", 0xFF1234);
+			WriteLine("숫자: {0:N}", 123456);
+			WriteLine("숫자: {0:N0}", 123456);
+			WriteLine("고정소수점: {0:F}", 123.456);
+			WriteLine("고정소수점: {0:F5}", 123.456);
+			WriteLine("공학: {0:E}", 123.456789);
 
-            //string name = "홍길동";
-            //int age = 25;
-            //WriteLine($"{name,-10}, {age:D3}");
-            //name = "김유신";
-            //age = 30;
-            //WriteLine($"{name}, {age, -10:D3}");
-            //name = "박문수";
-            //age = 15;
-            //WriteLine($"{name}, {(age > 20 ? "성인" : "미성년자")}");
+			DateTime dt = DateTime.Now;
 
-            //ArrayList arrList = null;
-            //arrList?.Add("C++");
-            //arrList?.Add("C#");
-            //WriteLine($"Count : {arrList?.Count}");
-            //WriteLine($"{arrList?[0]}");
-            //WriteLine($"{arrList?[1]}");
+			WriteLine("12시간 형식: {0:yyyy-MM-dd tt hh:mm:ss (ddd)}", dt);
+			WriteLine("24시간 형식: {0:yyyy-MM-dd HH:mm:ss (dddd)}", dt);
 
-            //arrList = new ArrayList();
-            //arrList?.Add("C++");
-            //arrList?.Add("C#");
-            //WriteLine($"Count : {arrList?.Count}");
-            //WriteLine($"{arrList?[0]}");
-            //WriteLine($"{arrList?[1]}");
+			CultureInfo ciKR = new CultureInfo("ko-KR");
+			WriteLine();
+			WriteLine(dt.ToString("yyyy-MM-dd tt hh:mm:ss (ddd)", ciKR));
+			WriteLine(dt.ToString("yyyy-MM-dd HH:mm:ss (dddd)", ciKR));
+			WriteLine(dt.ToString(ciKR));
+			CultureInfo ciUS = new CultureInfo("en-US");
+			WriteLine();
+			WriteLine(dt.ToString("yyyy-MM-dd tt hh:mm:ss (ddd)", ciUS));
+			WriteLine(dt.ToString("yyyy-MM-dd HH:mm:ss (dddd)", ciUS));
+			WriteLine(dt.ToString(ciUS));
 
-            //int? num = null;
-            //WriteLine($"{num ?? 0}");
-            //num = 10;
-            //WriteLine($"{num ?? 0}");
-            //string str3 = null;
-            //WriteLine($"{str3 ?? "Default"}");
-            //str3 = "I study C#";
-            //WriteLine($"{str3 ?? "Default"}");
+			string name = "홍길동";
+			int age = 25;
+			WriteLine($"{name,-10}, {age:D3}");
+			name = "김유신";
+			age = 30;
+			WriteLine($"{name}, {age,-10:D3}");
+			name = "박문수";
+			age = 15;
+			WriteLine($"{name}, {(age > 20 ? "성인" : "미성년자")}");
 
-            //Write("요일을 입력하세요 (월화수목금토) :");
-            //string day = ReadLine();
+			ArrayList arrList = null;
+			arrList?.Add("C++");
+			arrList?.Add("C#");
+			WriteLine($"Count : {arrList?.Count}");
+			WriteLine($"{arrList?[0]}");
+			WriteLine($"{arrList?[1]}");
 
-            //switch (day)
-            //{
-            //    case "일":
-            //        WriteLine("Sunday");
-            //        break;
-            //    case "월":
-            //        WriteLine("Monday");
-            //        break;
-            //    case "화":
-            //        WriteLine("Tuesday");
-            //        break;
-            //    case "수":
-            //        WriteLine("Wednesday");
-            //        break;
-            //    case "목":
-            //        WriteLine("Thurday");
-            //        break;
-            //    case "금":
-            //        WriteLine("Friday");
-            //        break;
-            //    case "토":
-            //        WriteLine("Saturday");
-            //        break;
-            //    default:
-            //        WriteLine("요일이 아니라구");
-            //        break;
-            //}
+			arrList = new ArrayList();
+			arrList?.Add("C++");
+			arrList?.Add("C#");
+			WriteLine($"Count : {arrList?.Count}");
+			WriteLine($"{arrList?[0]}");
+			WriteLine($"{arrList?[1]}");
 
-            //object obj = null;
-            //string str4 = ReadLine();
-            //if (int.TryParse(str4, out int int_num))
-            //    obj = int_num;
-            //else if (float.TryParse(str4, out float float_num))
-            //    obj = float_num;
-            //else
-            //    obj = str4;
+			int? num = null;
+			WriteLine($"{num ?? 0}");
+			num = 10;
+			WriteLine($"{num ?? 0}");
+			string str3 = null;
+			WriteLine($"{str3 ?? "Default"}");
+			str3 = "I study C#";
+			WriteLine($"{str3 ?? "Default"}");
 
-            //switch (obj)
-            //{
-            //    case int i_obj:
-            //        WriteLine($"{i_obj}는 int 형식");
-            //        break;
-            //    case float f_obj:
-            //        WriteLine($"{f_obj}는 float 형식");
-            //        break;
-            //    default:
-            //        WriteLine($"{obj}는 object 형식");
-            //        break;
-            //}
+			Write("요일을 입력하세요 (월화수목금토) :");
+			string day = ReadLine();
 
-            //int[] arr2 = new int[] { 0, 1, 2, 3, 4 };
-            //foreach (int i in arr2)
-            //    WriteLine(i);
+			switch (day)
+			{
+				case "일":
+					WriteLine("Sunday");
+					break;
+				case "월":
+					WriteLine("Monday");
+					break;
+				case "화":
+					WriteLine("Tuesday");
+					break;
+				case "수":
+					WriteLine("Wednesday");
+					break;
+				case "목":
+					WriteLine("Thurday");
+					break;
+				case "금":
+					WriteLine("Friday");
+					break;
+				case "토":
+					WriteLine("Saturday");
+					break;
+				default:
+					WriteLine("요일이 아니라구");
+					break;
+			}
 
-            int result = Calculator.Plus(2, 5);
+			object obj = null;
+			string str4 = ReadLine();
+			if (int.TryParse(str4, out int int_num))
+				obj = int_num;
+			else if (float.TryParse(str4, out float float_num))
+				obj = float_num;
+			else
+				obj = str4;
+
+			switch (obj)
+			{
+				case int i_obj:
+					WriteLine($"{i_obj}는 int 형식");
+					break;
+				case float f_obj:
+					WriteLine($"{f_obj}는 float 형식");
+					break;
+				default:
+					WriteLine($"{obj}는 object 형식");
+					break;
+			}
+
+			int[] arr2 = new int[] { 0, 1, 2, 3, 4 };
+			foreach (int i in arr2)
+				WriteLine(i);
+
+			int result = Calculator.Plus(2, 5);
             WriteLine(result);
             result = Calculator.Minus(10, 4);
             WriteLine(result);
@@ -298,13 +311,16 @@ namespace _190511
             WriteLine($"Ref Pirce : {ref_price}");
             WriteLine($"Normal Pirce : {normal_price}");
 
-            int a = 20;
-            int b = 3;
-            int c;
-            int d;
-            Divide(a, b, out c, out d);
+            int a_last = 20;
+            int b_last = 3;
+            int c_last;
+			int d_last;
+			Divide(a_last, b_last, out c_last, out d_last);
 
-            WriteLine($"a:{a}, b:{b}, a/b:{c}, a%b:{d}");
+            WriteLine($"a:{a_last }, b:{b_last }, a/b:{c_last }, a%b:{d_last }");
+
+
+			ReadKey();
         }
     }
     class Calculator
